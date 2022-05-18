@@ -1,7 +1,5 @@
 #include "main.h"
 
-#define MAXLINE 1024
-
 /**
  * main - prints a simple shell
  * @ac: number of arguments
@@ -11,16 +9,19 @@
  */
 int main(int ac, char **argv)
 {
-	(void)ac;
 	char *prog_name = argv[0];
-	char command[MAXLINE];
+	char *command;
+	size_t len = 100;
+	size_t command_char;
 
+	command = malloc(len * sizeof(char));
+	if (command == NULL)
+		exit(1);
 
 	while (1)
 	{
 		printf("$ ");
-		if ((fgets(command, MAXLINE, stdin) == NULL) && ferror(stdin))
-			perror("fgets error");
+		command_char = getline(&command, &len, stdin);
 		if (feof(stdin))
 		{
 			printf("\n");

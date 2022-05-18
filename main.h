@@ -7,7 +7,4 @@
 #include <unistd.h>
 #include <error.h>
 
-void prompt(void);
-void eval(char *);
-
 #endif
