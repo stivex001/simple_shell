@@ -15,22 +15,27 @@ int main(int ac, char **argv)
 	size_t command_char;
 
 	command = malloc(len * sizeof(char));
+
 	if (command == NULL)
 		exit(1);
 
 	while (1)
 	{
-		printf("$ ");
-		command_char = getline(&command, &len, stdin);
-		if (feof(stdin))
+		if (isatty(STDIN_FILENO))
 		{
-			printf("\n");
-			exit(0);
+			char *prompt = "$ ";
+
+			write(STDOUT_FILENO, prompt, strlen(prompt) + 1);
 		}
-		if (command != "exit")
-			printf("%s: No such file or directory\n", prog_name);
-		else
-			break;
+
+		if (getline(&command, &len, stdin) == -1)
+		{
+			if (isatty(STDIN_FILENO))
+				write(STDOUT_FILENO, "\n", 2);
+
+			free(command);
+		}
 	}
+
 	return (0);
 }
